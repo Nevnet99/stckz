@@ -1,0 +1,71 @@
+---
+import { Image } from "astro:assets";
+---
+
+<section>
+  <ul class="list-none flex flex-wrap gap-6" x-data>
+    <template x-for="stack in $store.filters.filteredStacks()">
+      <li>
+        <a :href="`/stack/${stack.slug}`">
+          <div class="card bg-base-100 w-96 shadow-xl">
+            <figure>
+              <img
+                :src="stack.data.heroImage"
+                alt=""
+                height="400"
+                width="400"
+                loading="eager"
+              />
+              <!-- <Image
+                :src="stack.data.heroImage"
+                alt=""
+                height="400"
+                width="400"
+                loading="eager"
+              /> -->
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title" x-text="stack.data.title"></h2>
+              <p class="text-sm" x-text="stack.data.description"></p>
+              <ul class="list-none flex flex-wrap gap-2">
+                <template x-for="tag in stack.data.tags">
+                  <li class="badge badge-primary" x-text="tag"></li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </a>
+      </li>
+    </template>
+    <!-- {
+      stacks.map((stack) => {
+        return (
+          <li>
+            <a href={`/stack/${stack.slug}`}>
+              <div class="card bg-base-100 w-96 shadow-xl">
+                <figure>
+                  <Image
+                    src={stack.data.heroImage}
+                    alt=""
+                    height="400"
+                    width="400"
+                    loading="eager"
+                  />
+                </figure>
+                <div class="card-body">
+                  <h2 class="card-title">{stack.data.title}</h2>
+                  <p class="text-sm">{stack.data.description}</p>
+                  <ul class="list-none flex flex-wrap gap-2">
+                    {stack.data.tags.map((tag) => (
+                      <li class="badge badge-primary">{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </a>
+          </li>
+        );
+      })
+    } -->
+  </ul>
+</section>

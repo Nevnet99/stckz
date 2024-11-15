@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+
+const stacks = await getCollection("stacks");
+const uniqueCategories = [
+  ...new Set(stacks.map((stack) => stack.data.category).flat()),
+];
+
+const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
+---
+
+<section class="flex flex-col gap-2" x-data>
+  <div class="collapse bg-base-200">
+    <input type="checkbox" />
+    <div class="collapse-title text-xl font-medium">Categories</div>
+    <div class="collapse-content">
+      <ul class="mb-10">
+        {
+          uniqueCategories.map((category) => (
+            <li>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">{category}</span>
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    name={category}
+                    @click="$store.filters.addFilter($event.target.name)"
+                  />
+                </label>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="collapse bg-base-200">
+    <input type="checkbox" />
+    <div class="collapse-title text-xl font-medium">Tags</div>
+    <div class="collapse-content">
+      <ul class="mb-10">
+        {
+          uniqueTags.map((category) => (
+            <li>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">{category}</span>
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    name={category}
+                    @click="$store.filters.addFilter($event.target.name)"
+                  />
+                </label>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
