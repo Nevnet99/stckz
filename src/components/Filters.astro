@@ -9,12 +9,12 @@ const uniqueCategories = [
 const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
 ---
 
-<section class="flex flex-col gap-2" x-data>
-  <div class="collapse bg-base-200">
-    <input type="checkbox" />
-    <div class="collapse-title text-xl font-medium">Categories</div>
+<section class="flex flex-col bg-base-200 h-fit" x-data>
+  <div class="collapse rounded-none bg-base-300">
+    <input type="checkbox" checked="checked" />
+    <div class="collapse-title text-lg">Categories</div>
     <div class="collapse-content">
-      <ul class="mb-10">
+      <ul class="mb-5">
         {
           uniqueCategories.map((category) => (
             <li>
@@ -37,9 +37,9 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
     </div>
   </div>
 
-  <div class="collapse bg-base-200">
-    <input type="checkbox" />
-    <div class="collapse-title text-xl font-medium">Tags</div>
+  <div class="collapse rounded-none bg-base-300">
+    <input type="checkbox" checked="checked" />
+    <div class="collapse-title text-lg">Tags</div>
     <div class="collapse-content">
       <ul class="mb-10">
         {
