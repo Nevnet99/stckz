@@ -4,6 +4,13 @@ import { Image } from "astro:assets";
 
 <section>
   <ul class="list-none flex flex-wrap gap-6" x-data>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
+
     <template x-for="stack in $store.filters.filteredStacks()">
       <li>
         <a :href="`/stack/${stack.slug}`">

@@ -39,6 +39,9 @@ const stacks = await getCollection("stacks");
         }
       },
     });
+    document.querySelectorAll(".posts-skeleton").forEach((el) => {
+      el.style = "display: none";
+    });
   });
 </script>
 
