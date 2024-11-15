@@ -11,7 +11,7 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
 
 <section class="flex flex-col bg-base-200 h-fit" x-data>
   <div class="collapse rounded-none bg-base-300">
-    <input type="checkbox" checked="checked" />
+    <input type="checkbox" checked="checked" aria-label="Categories" />
     <div class="collapse-title text-lg">Categories</div>
     <div class="collapse-content">
       <ul class="mb-5">
@@ -38,7 +38,7 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
   </div>
 
   <div class="collapse rounded-none bg-base-300">
-    <input type="checkbox" checked="checked" />
+    <input type="checkbox" checked="checked" aria-label="Tags" />
     <div class="collapse-title text-lg">Tags</div>
     <div class="collapse-content">
       <ul class="mb-10">
