@@ -11,16 +11,21 @@ const stacks = await getCollection("stacks");
 ---
 
 <script define:vars={{ stacks }} is:inline>
+  const filterByPubDate = (a, b) => {
+    console.log(a, b);
+    return new Date(b.data.pubDate) - new Date(a.data.pubDate);
+  };
+
   document.addEventListener("alpine:init", () => {
     Alpine.store("filters", {
       activeFilters: [],
-      stacks,
+      stacks: stacks.sort(filterByPubDate),
       filteredStacks() {
         if (this.activeFilters.length === 0) {
           return this.stacks;
         }
 
-        return this.stacks.filter((stack) => {
+        const filteredStacks = this.stacks.filter((stack) => {
           return this.activeFilters.some((filter) => {
             return (
               stack.data.tags.includes(filter) ||
@@ -28,6 +33,10 @@ const stacks = await getCollection("stacks");
             );
           });
         });
+
+        const filteredStacksByDate = filteredStacks.sort(filterByPubDate);
+
+        return filteredStacksByDate;
       },
       addFilter(filter) {
         if (this.activeFilters.includes(filter)) {
