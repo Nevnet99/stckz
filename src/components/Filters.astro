@@ -22,8 +22,9 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
                 <label class="label cursor-pointer">
                   <span class="label-text">{category}</span>
                   <input
+                    aria-label={`Filter by ${category}`}
                     type="checkbox"
-                    class="checkbox"
+                    class="checkbox rounded-none"
                     name={category}
                     @click="$store.filters.addFilter($event.target.name)"
                   />
@@ -48,8 +49,9 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
                 <label class="label cursor-pointer">
                   <span class="label-text">{category}</span>
                   <input
+                    aria-label={`Filter by ${category}`}
                     type="checkbox"
-                    class="checkbox"
+                    class="checkbox rounded-none"
                     name={category}
                     @click="$store.filters.addFilter($event.target.name)"
                   />
