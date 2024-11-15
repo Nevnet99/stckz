@@ -34,9 +34,13 @@ import { Image } from "astro:assets";
             <div class="card-body">
               <h2 class="card-title" x-text="stack.data.title"></h2>
               <p class="text-sm" x-text="stack.data.description"></p>
+
               <ul class="list-none flex flex-wrap gap-2">
-                <template x-for="tag in stack.data.tags">
+                <template x-for="tag in stack.data.category">
                   <li class="badge badge-primary" x-text="tag"></li>
+                </template>
+                <template x-for="tag in stack.data.tags">
+                  <li class="badge badge-accent" x-text="tag"></li>
                 </template>
               </ul>
             </div>
