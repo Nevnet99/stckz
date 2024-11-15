@@ -43,12 +43,33 @@ import { Image } from "astro:assets";
                   <li class="badge badge-accent" x-text="tag"></li>
                 </template>
               </ul>
+
+              <div class="flex items-center gap-3 mt-2">
+                <div class="avatar">
+                  <div class="ring-primary w-8 rounded-full">
+                    <img
+                      :src="$store.authors.getAuthor(stack.data.author).img"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex flex-col text-sm">
+                  <span
+                    x-text="$store.authors.getAuthor(stack.data.author).name"
+                  ></span>
+                  <span
+                    x-text="new Date(stack.data.pubDate).toLocaleDateString()"
+                  ></span>
+                </div>
+              </div>
             </div>
           </div>
         </a>
       </li>
     </template>
-    <!-- {
+  </ul>
+</section>
+<!-- {
       stacks.map((stack) => {
         return (
           <li>
@@ -78,5 +99,3 @@ import { Image } from "astro:assets";
         );
       })
     } -->
-  </ul>
-</section>

@@ -1,6 +1,6 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHORS } from "../consts";
 
 import { ViewTransitions } from "astro:transitions";
 import Filters from "../components/Filters.astro";
@@ -10,13 +10,20 @@ import { getCollection } from "astro:content";
 const stacks = await getCollection("stacks");
 ---
 
-<script define:vars={{ stacks }} is:inline>
+<script define:vars={{ stacks, AUTHORS }} is:inline>
   const filterByPubDate = (a, b) => {
     console.log(a, b);
     return new Date(b.data.pubDate) - new Date(a.data.pubDate);
   };
 
   document.addEventListener("alpine:init", () => {
+    Alpine.store("authors", {
+      authors: AUTHORS,
+      getAuthor(author) {
+        return this.authors.find((a) => a.name === author);
+      },
+    });
+
     Alpine.store("filters", {
       activeFilters: [],
       stacks: stacks.sort(filterByPubDate),
