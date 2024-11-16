@@ -6,13 +6,13 @@ import { ViewTransitions } from "astro:transitions";
 import Filters from "../components/Filters.astro";
 import Posts from "../components/Posts.astro";
 import { getCollection } from "astro:content";
+import Footer from "../components/Footer.astro";
 
 const stacks = await getCollection("stacks");
 ---
 
 <script define:vars={{ stacks, AUTHORS }} is:inline>
   const filterByPubDate = (a, b) => {
-    console.log(a, b);
     return new Date(b.data.pubDate) - new Date(a.data.pubDate);
   };
 
@@ -85,5 +85,6 @@ const stacks = await getCollection("stacks");
         <Posts />
       </div>
     </main>
+    <Footer />
   </body>
 </html>

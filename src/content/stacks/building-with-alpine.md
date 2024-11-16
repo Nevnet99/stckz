@@ -10,17 +10,13 @@ author: "Luke Brannagan"
 
 Alpine has been a breath of fresh air for me. This blog is the first time I've used it and I'm really enjoying it. It's a lot smaller than Vue or React and it's really easy to get started with. It's got a minimal API which makes it really easy to learn and it's really powerful.
 
-<br />
 
 I think in future projects I'll be using Alpine a lot more. It's perfect for small projects and given a chance I think it could be used for larger projects too. 
 
-<br />
 
 
 It has the same feel as Handlebars with some magic sprinkled in, I'm really enjoying the global store that it includes as well as the output of the JS is tiny in comparison to popular frameworks like Vue and React.
 
-<br />
-<br />
 
 Alpine.js:
 ```html
@@ -31,8 +27,6 @@ Alpine.js:
 
 ```
 
-<br />
-<br />
 
 React:
 ```jsx
@@ -48,8 +42,6 @@ export const Toggle = () => {
 };
 ```
 
-<br />
-<br />
 
 It's a considerable difference in size and complexity.
 
