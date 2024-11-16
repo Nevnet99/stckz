@@ -9,31 +9,35 @@
 }
 
 @font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
+	font-family: 'Coven';
+	src: url('/fonts/coven_filled_macroman/coven_filled-webfont.woff') format('woff');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
+	font-family: 'Conven Outlined';
+	src: url('/fonts/coven_outlined_macroman/coven_outlined-webfont.woff') format('woff');
+	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 
 body {
-	font-family: 'Atkinson', sans-serif;
+	font-family: 'Coven', sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
 	font-size: 20px;
-	line-height: 1.7;
+	line-height: 1.2;
+}
+
+h1 {
+	font-family: 'Conven Outlined', sans-serif;
+	line-height: 1.2;
 }
 
 
