@@ -14,7 +14,7 @@ import { Image } from "astro:assets";
     <template x-for="stack in $store.filters.filteredStacks()">
       <li>
         <a :href="`/stack/${stack.slug}`">
-          <div class="card bg-base-100 w-96 shadow-xl">
+          <div class="card bg-base-300 w-96 shadow-xl rounded-none">
             <figure>
               <img
                 :src="stack.data.heroImage"
@@ -32,7 +32,8 @@ import { Image } from "astro:assets";
               /> -->
             </figure>
             <div class="card-body">
-              <h2 class="card-title" x-text="stack.data.title"></h2>
+              <h2 class="card-title brightness-150" x-text="stack.data.title">
+              </h2>
               <p class="text-sm" x-text="stack.data.description"></p>
 
               <ul class="list-none flex flex-wrap gap-2">

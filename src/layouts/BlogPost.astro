@@ -59,7 +59,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
   <body>
     <main>
       <div class="prose" x-data>
-        <button class="btn btn-ghost" @click="history.back()">Back</button>
+        <button
+          class="btn btn-outline brightness-150 border-secondary"
+          @click="history.back()">Back</button
+        >
       </div>
       <article>
         <div class="hero-image mt-20">
@@ -71,7 +74,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
         </div>
         <div class="prose">
           <div class="title">
-            <h1 class="text-4xl">{title}</h1>
+            <h1 class="text-5xl brightness-150">{title}</h1>
             <hr />
           </div>
           <slot />
