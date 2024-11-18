@@ -31,8 +31,8 @@ const author = await getEntry("author", stack.data.author);
   </figure>
 
   <div class="card-body">
-    <h2 class="card-title brightness-150">
-      <a href={`/stack/${stack.slug}`}>
+    <h2 class="card-title">
+      <a class="link-overlay" href={`/stack/${stack.slug}`}>
         {stack.data.title}
       </a>
     </h2>

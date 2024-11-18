@@ -20,19 +20,39 @@
   font-display: swap;
 }
 
-body {
-  font-family: "Coven", sans-serif;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  font-size: 20px;
-  line-height: 1.2;
-  letter-spacing: 0.05em;
+@layer components {
+  .link-box {
+    position: relative;
+  }
+
+  .link-box .link-overlay:before {
+    display: block;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .link-box a:not(.link-overlay) {
+    position: relative;
+    z-index: 2;
+  }
 }
 
-h1 {
-  font-family: "Conven Outlined", sans-serif;
-  line-height: 1.2;
+@layer utilities {
+  .type-outline-lg {
+    @apply text-9xl font-sans-outline;
+  }
+
+  .type-h1 {
+    @apply text-6xl leading-snug;
+  }
+
+  .type-h2 {
+    @apply text-4xl leading-snug;
+  }
+
+  .type-body {
+    @apply text-xl;
+  }
 }

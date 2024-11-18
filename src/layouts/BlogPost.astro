@@ -1,70 +1,68 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import BaseHead from "../components/BaseHead.astro";
+import { Image } from "astro:assets";
 import Footer from "../components/Footer.astro";
-import { ViewTransitions } from "astro:transitions";
+import BaseLayout from "./BaseLayout.astro";
 
 type Props = CollectionEntry<"blog">["data"] & {
   headings: { depth: number; text: string; slug: string }[];
 };
 
-const { title, description, pubDate, heroImage, headings } = Astro.props;
+const { title, description, heroImage, headings } = Astro.props;
 
 const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
+<BaseLayout>
+  <main class="max-w-[90%] md:max-w-[70%] mx-auto mt-10">
+    <a class="btn btn-outline brightness-150 border-secondary" href="/">
+      Back
+    </a>
 
-    <ViewTransitions transition:animate={"fade"} />
-  </head>
-
-  <body>
-    <main class="max-w-[90%] md:max-w-[70%] mx-auto mt-10">
-      <div x-data>
-        <a class="btn btn-outline brightness-150 border-secondary" href="/"
-          >Back</a
-        >
+    <article>
+      <div class="my-10">
+        <h1 class="text-5xl brightness-150 mb-4">{title}</h1>
+        <p class="text-xl">
+          {description}
+        </p>
       </div>
-      <article>
-        <div class="my-10">
-          <h1 class="text-5xl brightness-150 mb-4">{title}</h1>
-          <p class="text-xl">
-            {description}
-          </p>
-        </div>
-        <div class="mb-10">
-          {heroImage && <img class="w-full" src={heroImage} alt="" />}
-        </div>
-        <div class="grid md:grid-cols-[4fr,8fr] gap-4">
-          <div>
-            <h2 class="text-2xl mb-6 brightness-150">Table of Contents</h2>
-            <ul class="flex flex-col gap-4">
-              {
-                filteredHeadings.map((heading) => (
-                  <li>
-                    <a
-                      class="link link-accent text-md"
-                      href={`#${heading.slug}`}
-                    >
-                      {heading.text}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
+      {
+        heroImage && (
+          <div class="mb-10">
+            <Image
+              class="w-full h-auto aspect-video object-cover"
+              src={heroImage}
+              alt={`Cover image for ${title}`}
+              width={1280}
+              height={768}
+            />
           </div>
-          <div
-            class="prose
+        )
+      }
+      <div class="grid md:grid-cols-[4fr,8fr] gap-4">
+        <div>
+          <h2 class="text-2xl mb-6 brightness-150">Table of Contents</h2>
+          <ul class="flex flex-col gap-4">
+            {
+              filteredHeadings.map((heading) => (
+                <li>
+                  <a class="link link-accent text-md" href={`#${heading.slug}`}>
+                    {heading.text}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div
+          class="prose
   prose-h2:text-3xl
   prose-a:link prose-a:link-accent prose-img:rounded-xl"
-          >
-            <slot />
-          </div>
+        >
+          <slot />
         </div>
-      </article>
-    </main>
-    <Footer />
-  </body>
-</html>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>

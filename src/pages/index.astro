@@ -1,11 +1,16 @@
 ---
 import { getCollection } from "astro:content";
-import Filters from "../components/Filters.astro";
 import Footer from "../components/Footer.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import StackTeaser from "../components/StackTeaser.astro";
+import CheckboxGroup from "../components/CheckboxGroup.astro";
 
 const stacks = await getCollection("stacks");
+
+const uniqueCategories = [
+  ...new Set(stacks.map((stack) => stack.data.category).flat()),
+];
+const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
 ---
 
 <BaseLayout>
@@ -14,14 +19,31 @@ const stacks = await getCollection("stacks");
     x-data="filterCards"
   >
     <header class="flex flex-col items-center">
-      <h1 class="text-9xl font-black mb-4 brightness-150">Stckz</h1>
-      <h2 class="text-4xl mb-12 text-center md:max-w-[60%] brightness-150">
+      <h1 class="type-outline-lg mb-4">Stckz</h1>
+      <h2 class="type-h2 mb-12 text-center md:max-w-[60%] brightness-150">
         A one stop shop for ramblings and modern web development stacks.
       </h2>
     </header>
 
     <main class="grid gap-3 md:grid-cols-[12rem,1fr] w-full">
-      <Filters />
+      <section class="sticky top-3 flex flex-col bg-base-200 h-fit">
+        <CheckboxGroup
+          options={uniqueCategories}
+          optionProps={(option: string) => ({
+            "aria-label": `Filter by ${option} category`,
+            "@click": `toggleCategory('${option}')`,
+          })}
+          title="Categories"
+        />
+        <CheckboxGroup
+          options={uniqueTags}
+          optionProps={(option: string) => ({
+            "aria-label": `Filter by ${option} tag`,
+            "@click": `toggleTag('${option}')`,
+          })}
+          title="Tags"
+        />
+      </section>
 
       <section class="list-none flex flex-wrap gap-6">
         {
