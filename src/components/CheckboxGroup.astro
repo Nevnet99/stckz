@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = {
+  options: string[];
+  optionProps?:
+    | HTMLAttributes<"input">
+    | ((option: string) => HTMLAttributes<"input">);
+  title: string;
+};
+
+const { optionProps = {}, options, title } = Astro.props;
+---
+
+<div class="collapse rounded-none bg-base-300 border-2 border-secondary">
+  <input type="checkbox" checked="checked" aria-label={title} />
+
+  <div class="collapse-title type-body brightness-150">
+    {title}
+  </div>
+
+  <div class="collapse-content">
+    <ul class="mb-5">
+      {
+        options.map((option) => (
+          <li>
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{option}</span>
+
+                <input
+                  class="checkbox rounded-none"
+                  type="checkbox"
+                  name={option}
+                  {...(typeof optionProps == "function"
+                    ? optionProps(option)
+                    : optionProps)}
+                />
+              </label>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

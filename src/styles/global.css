@@ -1,51 +1,58 @@
-@font-face {
-	font-family: 'Coven';
-	src: url('/fonts/coven_filled_macroman/coven_filled-webfont.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
-	font-family: 'Conven Outlined';
-	src: url('/fonts/coven_outlined_macroman/coven_outlined-webfont.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+  font-family: "Coven";
+  src: url("/fonts/coven_filled_macroman/coven_filled-webfont.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-body {
-	font-family: 'Coven', sans-serif;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	font-size: 20px;
-	line-height: 1.2;
-	letter-spacing: 0.05em;
+@font-face {
+  font-family: "Conven Outlined";
+  src: url("/fonts/coven_outlined_macroman/coven_outlined-webfont.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-h1 {
-	font-family: 'Conven Outlined', sans-serif;
-	line-height: 1.2;
+@layer components {
+  .link-box {
+    position: relative;
+  }
+
+  .link-box .link-overlay:before {
+    display: block;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .link-box a:not(.link-overlay) {
+    position: relative;
+    z-index: 2;
+  }
 }
 
+@layer utilities {
+  .type-outline-lg {
+    @apply text-9xl font-sans-outline;
+  }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+  .type-h1 {
+    @apply text-6xl leading-snug;
+  }
+
+  .type-h2 {
+    @apply text-4xl leading-snug;
+  }
+
+  .type-body {
+    @apply text-xl;
+  }
 }

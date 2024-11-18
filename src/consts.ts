@@ -10,3 +10,5 @@ export const AUTHORS = [
     img: "https://avatars.githubusercontent.com/u/28801236?v=4"
   }
 ]
+
+export const FALLBACK_SHARING_IMAGE = '/blog-placeholder-1.jpg';

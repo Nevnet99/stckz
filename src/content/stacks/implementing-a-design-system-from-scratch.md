@@ -5,7 +5,7 @@ pubDate: 'Nov 16 2024'
 heroImage: '/design-system.webp'
 category: ['blog']
 tags: ['design systems', 'react', 'radix']
-author: "Luke Brannagan"
+author: "luke"
 ---
 
 I've recently been working on implementing a design system from scratch for a scale up. It's been a really interesting experience and I've learned a lot along the way. I thought I'd share some of my learnings in this blog post.
@@ -15,7 +15,7 @@ I've recently been working on implementing a design system from scratch for a sc
 Most of the architecture for the company frontend was already in place when I joined. Most of our production apps are built with various flavours of React. I've also worked with React for a number of years so it was good fit for me as well as the company to build the design system with React.
 
 
-Around the time I started to build the DS I came across the book <a href="https://www.amazon.co.uk/Design-That-Scales-Creating-Sustainable/dp/1959029215" target="_blank">Design that Scales</a> by Dan Mall. 
+Around the time I started to build the DS I came across the book <a href="https://www.amazon.co.uk/Design-That-Scales-Creating-Sustainable/dp/1959029215" target="_blank">Design that Scales</a> by Dan Mall.
 
 
 <img src="/design-that-scales.webp">
@@ -37,4 +37,4 @@ For toasts I used React Toastify that exports a CSS file that styles the toasts 
 
 ## Documentation
 
-We used Storybook for the documentation of the components. It's a tool that allows you to see all the components in one place and interact with them. It also allows you to see the different states of the components which is really useful for testing. We have hopes in the future to implement 
+We used Storybook for the documentation of the components. It's a tool that allows you to see all the components in one place and interact with them. It also allows you to see the different states of the components which is really useful for testing. We have hopes in the future to implement

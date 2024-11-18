@@ -5,10 +5,10 @@ pubDate: 'Nov 15 2024'
 heroImage: '/stckz.webp'
 category: ['blog']
 tags: ['alpine', 'astro', 'daisyui', 'tailwindcss', 'vercel']
-author: "Luke Brannagan"
+author: "luke"
 ---
 
-Hey, I'm Luke and this is my new website stckz.com I'm aiming to post some blog posts about web development and other tech related topics. 
+Hey, I'm Luke and this is my new website stckz.com I'm aiming to post some blog posts about web development and other tech related topics.
 
 But first lets talk about the tech stack I'm using to build this site.
 
@@ -26,5 +26,4 @@ I'm hosting the site on Vercel purely because of how easy it is to deploy and th
 
 I'm really happy with how the site has turned out and I'm looking forward to writing more blog posts in the future. If you have any questions about the tech stack I'm using feel free to reach out to me on Github or Twitter.
 
-The lighthouse score for this site is insane. 
-
+The lighthouse score for this site is insane.
