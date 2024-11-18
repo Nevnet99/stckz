@@ -1,90 +1,108 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION, AUTHORS } from "../consts";
-
-import { ViewTransitions } from "astro:transitions";
-import Filters from "../components/Filters.astro";
-import Posts from "../components/Posts.astro";
 import { getCollection } from "astro:content";
+import Filters from "../components/Filters.astro";
 import Footer from "../components/Footer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import StackTeaser from "../components/StackTeaser.astro";
 
 const stacks = await getCollection("stacks");
 ---
 
-<script define:vars={{ stacks, AUTHORS }} is:inline>
-  const filterByPubDate = (a, b) => {
-    return new Date(b.data.pubDate) - new Date(a.data.pubDate);
-  };
+<BaseLayout>
+  <div
+    class="flex justify-center flex-col items-center py-20 px-12"
+    x-data="filterCards"
+  >
+    <header class="flex flex-col items-center">
+      <h1 class="text-9xl font-black mb-4 brightness-150">Stckz</h1>
+      <h2 class="text-4xl mb-12 text-center md:max-w-[60%] brightness-150">
+        A one stop shop for ramblings and modern web development stacks.
+      </h2>
+    </header>
+
+    <main class="grid gap-3 md:grid-cols-[12rem,1fr] w-full">
+      <Filters />
+
+      <section class="list-none flex flex-wrap gap-6">
+        {
+          stacks.map((stack) => (
+            <StackTeaser
+              stack={stack}
+              x-show={`shouldShowCard(${JSON.stringify({
+                category: stack.data.category,
+                tags: stack.data.tags,
+              })})`}
+            />
+          ))
+        }
+      </section>
+    </main>
+  </div>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  import Alpine from "alpinejs";
+
+  const DELIMITER = "|";
 
   document.addEventListener("alpine:init", () => {
-    Alpine.store("authors", {
-      authors: AUTHORS,
-      getAuthor(author) {
-        return this.authors.find((a) => a.name === author);
-      },
-    });
+    Alpine.data("filterCards", function () {
+      let queryParams = new URLSearchParams(window.location.search);
 
-    Alpine.store("filters", {
-      activeFilters: [],
-      stacks: stacks.sort(filterByPubDate),
-      filteredStacks() {
-        if (this.activeFilters.length === 0) {
-          return this.stacks;
-        }
+      return {
+        categories: Array.from(
+          queryParams.get("categories")?.split(DELIMITER) || []
+        ) as string[],
+        tags: Array.from(
+          queryParams.get("tags")?.split(DELIMITER) || []
+        ) as string[],
 
-        const filteredStacks = this.stacks.filter((stack) => {
-          return this.activeFilters.some((filter) => {
-            return (
-              stack.data.tags.includes(filter) ||
-              stack.data.category.includes(filter)
-            );
+        init() {
+          this.$watch("categories", (categories) => {
+            const url = new URL(window.location.href);
+            if (categories.length > 0) {
+              url.searchParams.set("categories", categories.join(DELIMITER));
+            } else {
+              url.searchParams.delete("categories");
+            }
+            history.pushState({}, "", url.toString());
           });
-        });
 
-        const filteredStacksByDate = filteredStacks.sort(filterByPubDate);
+          this.$watch("tags", () => {
+            const url = new URL(window.location.href);
+            if (this.tags.length > 0) {
+              url.searchParams.set("tags", this.tags.join(DELIMITER));
+            } else {
+              url.searchParams.delete("tags");
+            }
+            history.pushState({}, "", url.toString());
+          });
+        },
 
-        return filteredStacksByDate;
-      },
-      addFilter(filter) {
-        if (this.activeFilters.includes(filter)) {
-          this.activeFilters = this.activeFilters.filter(
-            (activeFilter) => activeFilter !== filter
+        shouldShowCard(args: { category?: string[]; tags?: string[] }) {
+          if (this.categories.length === 0 && this.tags.length === 0) {
+            return true;
+          }
+          return (
+            // Logic sucks...it's just a demo
+            (args.category || []).some((item) =>
+              this.categories.includes(item)
+            ) || (args.tags || []).some((item) => this.tags.includes(item))
           );
-        } else {
-          this.activeFilters.push(filter);
-        }
-      },
+        },
+        toggleCategory(id: string) {
+          this.categories = this.categories.includes(id)
+            ? this.categories.filter((item) => item !== id)
+            : [...this.categories, id];
+        },
+        toggleTag(id: string) {
+          this.tags = this.tags.includes(id)
+            ? this.tags.filter((item) => item !== id)
+            : [...this.tags, id];
+        },
+      };
     });
-
-    document.querySelectorAll(".posts-skeleton").forEach((el) => {
-      el.style = "display: none";
-    });
-  });
-
-  document.querySelectorAll(".posts-skeleton").forEach((el) => {
-    el.style = "display: none";
   });
 </script>
-
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <ViewTransitions transition:animate={"fade"} />
-  </head>
-  <body>
-    <main class="flex justify-center flex-col items-center py-20 px-12">
-      <section class="flex flex-col items-center">
-        <h1 class="text-9xl font-black mb-4 brightness-150">Stckz</h1>
-        <h2 class="text-4xl mb-12 text-center md:max-w-[60%] brightness-150">
-          A one stop shop for ramblings and modern web development stacks.
-        </h2>
-      </section>
-
-      <div class="grid gap-3 md:grid-cols-[12rem,1fr] w-full">
-        <Filters />
-        <Posts />
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>

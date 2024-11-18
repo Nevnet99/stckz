@@ -26,7 +26,7 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
                     type="checkbox"
                     class="checkbox rounded-none"
                     name={category}
-                    @click="$store.filters.addFilter($event.target.name)"
+                    @click={`toggleCategory('${category}')`}
                   />
                 </label>
               </div>
@@ -55,7 +55,7 @@ const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
                     type="checkbox"
                     class="checkbox rounded-none"
                     name={category}
-                    @click="$store.filters.addFilter($event.target.name)"
+                    @click={`toggleTag('${category}')`}
                   />
                 </label>
               </div>

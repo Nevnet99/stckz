@@ -1,0 +1,83 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = HTMLAttributes<"a"> & {
+  stack: CollectionEntry<"stacks">;
+};
+
+const { class: className, stack, ...props } = Astro.props;
+
+const author = await getEntry("author", stack.data.author);
+---
+
+<article
+  class:list={[
+    "link-box card bg-base-300 w-96 shadow-xl rounded-none",
+    className,
+  ]}
+  {...props}
+>
+  <figure>
+    <Image
+      src={stack.data.heroImage}
+      alt={`Image for ${stack.data.title}`}
+      height="400"
+      width="400"
+      loading="eager"
+    />
+  </figure>
+
+  <div class="card-body">
+    <h2 class="card-title brightness-150">
+      <a href={`/stack/${stack.slug}`}>
+        {stack.data.title}
+      </a>
+    </h2>
+
+    <p class="text-sm">{stack.data.description}</p>
+
+    <ul class="list-none flex flex-wrap gap-2">
+      {
+        stack.data?.category?.map((item) => (
+          <li>
+            <span class="badge badge-primary">{item}</span>
+          </li>
+        ))
+      }
+      {
+        stack.data?.tags?.map((item) => (
+          <li>
+            <span class="badge badge-accent">{item}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      author && (
+        <div class="flex items-center gap-3 mt-2">
+          <div class="avatar">
+            <div class="ring-primary w-8 rounded-full">
+              <img
+                src={author.data.image}
+                alt="author"
+                loading="lazy"
+                width="32"
+                height="32"
+                decoding="async"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col text-sm">
+            <span>{author.data.name}</span>
+            <span>{new Date(stack.data.pubDate).toLocaleDateString()}</span>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</article>
