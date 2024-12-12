@@ -3,7 +3,7 @@ title: 'Using REM without implementing it'
 description: 'How using REM without a plan to implement it can be detrimental to your project'
 pubDate: 'Thur 12 Dec'
 heroImage: '/rem-post-img.png'
-category: ['Blog']
+category: ['blog']
 tags: ['CSS']
 author: "Luke Brannagan"
 ---
