@@ -7,62 +7,186 @@ const uniqueCategories = [
 ];
 
 const uniqueTags = [...new Set(stacks.map((stack) => stack.data.tags).flat())];
+
+const uniqueStatuses = [
+  ...new Set(stacks.map((stack) => stack.data.status).filter(Boolean)),
+];
+
+// Get unique years from publication dates
+const uniqueYears = [
+  ...new Set(stacks.map((stack) => new Date(stack.data.pubDate).getFullYear())),
+].sort((a, b) => b - a); // Sort years descending
 ---
 
-<section class="flex flex-col bg-base-200 h-fit" x-data>
-  <div class="collapse rounded-none bg-base-300 border-2 border-secondary">
-    <input type="checkbox" checked="checked" aria-label="Categories" />
-    <div class="collapse-title text-sm brightness-150">Categories</div>
-    <div class="collapse-content">
-      <ul class="mb-5">
-        {
-          uniqueCategories.map((category) => (
-            <li>
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text">{category}</span>
-                  <input
-                    aria-label={`Filter by ${category}`}
-                    type="checkbox"
-                    class="checkbox rounded-none"
-                    name={category}
-                    @click="$store.filters.addFilter($event.target.name)"
-                  />
-                </label>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+<section
+  class="bg-dark-800/50 backdrop-blur-sm border border-dark-600/50 rounded-xl p-4"
+  x-data
+>
+  <!-- Date Filter -->
+  {
+    uniqueYears.length > 0 && (
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="text-sm font-semibold text-dark-100 uppercase tracking-wide">
+            Year
+          </h4>
+          <span class="text-xs text-dark-400 bg-dark-700 px-2 py-1 rounded-full">
+            {uniqueYears.length}
+          </span>
+        </div>
+        <div class="space-y-2">
+          {uniqueYears.map((year) => (
+            <label class="flex items-center group cursor-pointer">
+              <input
+                aria-label={`Filter by ${year}`}
+                type="checkbox"
+                class="w-4 h-4 rounded border-dark-500 bg-dark-700 checked:bg-accent-600 checked:border-accent-600 focus:ring-2 focus:ring-accent-500/20 focus:ring-offset-2 focus:ring-offset-dark-800 transition-all duration-200"
+                name={year.toString()}
+                @click="$store.filters.addFilter($event.target.name)"
+              />
+              <span class="ml-3 text-sm text-dark-200 group-hover:text-dark-100 transition-colors">
+                {year}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Status Filter -->
+  {
+    uniqueStatuses.length > 0 && (
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="text-sm font-semibold text-dark-100 uppercase tracking-wide">
+            Status
+          </h4>
+          <span class="text-xs text-dark-400 bg-dark-700 px-2 py-1 rounded-full">
+            {uniqueStatuses.length}
+          </span>
+        </div>
+        <div class="space-y-2">
+          {uniqueStatuses.map((status) => (
+            <label class="flex items-center group cursor-pointer">
+              <input
+                aria-label={`Filter by ${status} status`}
+                type="checkbox"
+                class="w-4 h-4 rounded border-dark-500 bg-dark-700 checked:bg-accent-600 checked:border-accent-600 focus:ring-2 focus:ring-accent-500/20 focus:ring-offset-2 focus:ring-offset-dark-800 transition-all duration-200"
+                name={status}
+                @click="$store.filters.addFilter($event.target.name)"
+              />
+              <span class="ml-3 text-sm text-dark-200 group-hover:text-dark-100 transition-colors">
+                {status}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <!-- Categories Filter -->
+  <div class="mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <h4 class="text-sm font-semibold text-dark-100 uppercase tracking-wide">
+        Categories
+      </h4>
+      <span class="text-xs text-dark-400 bg-dark-700 px-2 py-1 rounded-full">
+        {uniqueCategories.length}
+      </span>
+    </div>
+    <div class="space-y-2">
+      {
+        uniqueCategories.map((category) => (
+          <label class="flex items-center group cursor-pointer">
+            <input
+              aria-label={`Filter by ${category}`}
+              type="checkbox"
+              class="w-4 h-4 rounded border-dark-500 bg-dark-700 checked:bg-accent-600 checked:border-accent-600 focus:ring-2 focus:ring-accent-500/20 focus:ring-offset-2 focus:ring-offset-dark-800 transition-all duration-200"
+              name={category}
+              @click="$store.filters.addFilter($event.target.name)"
+            />
+            <span class="ml-3 text-sm text-dark-200 group-hover:text-dark-100 transition-colors">
+              {category}
+            </span>
+          </label>
+        ))
+      }
     </div>
   </div>
 
+  <!-- Tags Filter -->
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <h4 class="text-sm font-semibold text-dark-100 uppercase tracking-wide">
+        Tags
+      </h4>
+      <span class="text-xs text-dark-400 bg-dark-700 px-2 py-1 rounded-full">
+        {uniqueTags.length}
+      </span>
+    </div>
+    <div class="space-y-2">
+      {
+        uniqueTags.map((tag) => (
+          <label class="flex items-center group cursor-pointer">
+            <input
+              aria-label={`Filter by ${tag}`}
+              type="checkbox"
+              class="w-4 h-4 rounded border-dark-500 bg-dark-700 checked:bg-accent-600 checked:border-accent-600 focus:ring-2 focus:ring-accent-500/20 focus:ring-offset-2 focus:ring-offset-dark-800 transition-all duration-200"
+              name={tag}
+              @click="$store.filters.addFilter($event.target.name)"
+            />
+            <span class="ml-3 text-sm text-dark-200 group-hover:text-dark-100 transition-colors">
+              {tag}
+            </span>
+          </label>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Active Filters Summary -->
   <div
-    class="collapse rounded-none bg-base-300 border-2 border-secondary border-t-0"
+    x-show="$store.filters.activeFilters.length > 0"
+    class="mt-6 pt-4 border-t border-dark-600/50"
   >
-    <input type="checkbox" checked="checked" aria-label="Tags" />
-    <div class="collapse-title text-sm brightness-150">Tags</div>
-    <div class="collapse-content">
-      <ul>
-        {
-          uniqueTags.map((category) => (
-            <li>
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text">{category}</span>
-                  <input
-                    aria-label={`Filter by ${category}`}
-                    type="checkbox"
-                    class="checkbox rounded-none"
-                    name={category}
-                    @click="$store.filters.addFilter($event.target.name)"
-                  />
-                </label>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+    <div class="flex items-center justify-between mb-3">
+      <h4 class="text-sm font-semibold text-dark-100 uppercase tracking-wide">
+        Active Filters
+      </h4>
+      <span
+        class="text-xs text-dark-400 bg-accent-600/20 text-accent-400 px-2 py-1 rounded-full"
+      >
+        <span x-text="$store.filters.activeFilters.length"></span> active
+      </span>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <template x-for="filter in $store.filters.activeFilters">
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1 bg-accent-600/20 text-accent-400 border border-accent-600/30 rounded-lg text-xs font-medium"
+        >
+          <span x-text="filter"></span>
+          <button
+            @click="$store.filters.addFilter(filter)"
+            class="hover:text-accent-300 transition-colors"
+            aria-label="Remove filter"
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </span>
+      </template>
     </div>
   </div>
 </section>

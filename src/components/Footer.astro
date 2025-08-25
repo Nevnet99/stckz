@@ -2,28 +2,12 @@
 const today = new Date();
 ---
 
-<footer>
-  &copy; {today.getFullYear()} Luke Brannagan. All rights reserved.
+<footer class="bg-dark-800 border-t border-dark-600 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center">
+      <p class="text-dark-300 text-sm">
+        &copy; {today.getFullYear()} Luke Brannagan. All rights reserved.
+      </p>
+    </div>
+  </div>
 </footer>
-<style>
-  footer {
-    padding: 2em 1em 2em 1em;
-    background: linear-gradient(var(--gray-gradient)) no-repeat;
-    color: rgb(var(--gray));
-    text-align: center;
-    @apply bg-base-300 mt-10 text-sm;
-  }
-  .social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-  }
-  .social-links a {
-    text-decoration: none;
-    color: rgb(var(--gray));
-  }
-  .social-links a:hover {
-    color: rgb(var(--gray-dark));
-  }
-</style>

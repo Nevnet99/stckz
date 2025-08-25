@@ -1,53 +1,128 @@
 ---
 import { Image } from "astro:assets";
+
+const getStatusColor = (status: string | undefined) => {
+  switch (status) {
+    case "planning":
+      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "in-progress":
+      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "completed":
+      return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "on-hold":
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  }
+};
+
+const getStatusText = (status: string | undefined) => {
+  switch (status) {
+    case "planning":
+      return "Planning";
+    case "in-progress":
+      return "In Progress";
+    case "completed":
+      return "Completed";
+    case "on-hold":
+      return "On Hold";
+    default:
+      return "Unknown";
+  }
+};
 ---
 
 <section>
-  <ul class="list-none flex flex-wrap gap-6" x-data>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-    <div class="skeleton posts-skeleton h-[340px] w-[384px]"></div>
-
+  <!-- Main grid with Alpine.js -->
+  <ul
+    class="list-none grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    x-data
+  >
     <template x-for="stack in $store.filters.filteredStacks()">
       <li>
         <a :href="`/stack/${stack.slug}`">
-          <div class="card bg-base-300 w-96 shadow-xl rounded-none">
-            <figure>
+          <div
+            class="card bg-dark-800 border border-dark-600 w-full shadow-xl rounded-xl hover:shadow-2xl hover:border-dark-500 transition-all duration-300 group"
+          >
+            <figure class="relative">
               <img
                 :src="stack.data.heroImage"
                 alt=""
-                height="400"
-                width="400"
+                height="300"
+                width="300"
                 loading="eager"
+                class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <!-- <Image
-                :src="stack.data.heroImage"
-                alt=""
-                height="400"
-                width="400"
-                loading="eager"
-              /> -->
+              <!-- Status Badge -->
+              <div class="absolute top-3 right-3">
+                <span
+                  x-show="stack.data.status"
+                  :class="`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(stack.data.status)}`"
+                  x-text="getStatusText(stack.data.status)"
+                >
+                </span>
+              </div>
             </figure>
-            <div class="card-body">
-              <h2 class="card-title brightness-150" x-text="stack.data.title">
+
+            <div class="card-body p-4">
+              <h2
+                class="card-title text-dark-50 text-lg mb-2 group-hover:text-accent-400 transition-colors"
+                x-text="stack.data.title"
+              >
               </h2>
-              <p class="text-sm" x-text="stack.data.description"></p>
+              <p
+                class="text-sm text-dark-200 mb-3 leading-relaxed line-clamp-2"
+                x-text="stack.data.description"
+              >
+              </p>
 
-              <ul class="list-none flex flex-wrap gap-2">
-                <template x-for="tag in stack.data.category">
-                  <li class="badge badge-primary" x-text="tag"></li>
-                </template>
-                <template x-for="tag in stack.data.tags">
-                  <li class="badge badge-accent" x-text="tag"></li>
-                </template>
-              </ul>
+              <!-- Tech Stack Preview -->
+              <div
+                x-show="stack.data.techStack && stack.data.techStack.length > 0"
+                class="mb-3"
+              >
+                <div class="flex flex-wrap gap-1">
+                  <template x-for="tech in stack.data.techStack.slice(0, 2)">
+                    <span
+                      class="px-2 py-1 bg-dark-700 border border-dark-600 rounded-md text-dark-300 text-xs font-medium"
+                    >
+                      <span x-text="tech"></span>
+                    </span>
+                  </template>
+                  <span
+                    x-show="stack.data.techStack.length > 2"
+                    class="px-2 py-1 bg-dark-700 border border-dark-600 rounded-md text-dark-400 text-xs font-medium"
+                  >
+                    +<span x-text="stack.data.techStack.length - 2"></span> more
+                  </span>
+                </div>
+              </div>
 
-              <div class="flex items-center gap-3 mt-2">
+              <!-- Tags -->
+              <div class="mb-3">
+                <ul class="list-none flex flex-wrap gap-1">
+                  <template x-for="tag in stack.data.category">
+                    <li
+                      class="badge badge-primary bg-accent-600/20 text-accent-400 border-accent-600/30 text-xs"
+                      x-text="tag"
+                    >
+                    </li>
+                  </template>
+                  <template x-for="tag in stack.data.tags.slice(0, 1)">
+                    <li
+                      class="badge badge-accent bg-dark-700 text-dark-300 border-dark-600 text-xs"
+                      x-text="tag"
+                    >
+                    </li>
+                  </template>
+                </ul>
+              </div>
+
+              <div
+                class="flex items-center gap-3 mt-auto pt-3 border-t border-dark-600"
+              >
                 <div class="avatar">
-                  <div class="ring-primary w-8 rounded-full">
+                  <div class="ring-primary w-6 rounded-full">
                     <img
                       :src="$store.authors.getAuthor(stack.data.author).img"
                       alt="author"
@@ -55,13 +130,13 @@ import { Image } from "astro:assets";
                   </div>
                 </div>
 
-                <div class="flex flex-col text-sm">
+                <div class="flex flex-col text-xs">
                   <span
                     x-text="$store.authors.getAuthor(stack.data.author).name"
-                  ></span>
+                    class="text-dark-100 font-medium"></span>
                   <span
                     x-text="new Date(stack.data.pubDate).toLocaleDateString()"
-                  ></span>
+                    class="text-dark-400"></span>
                 </div>
               </div>
             </div>
@@ -71,33 +146,3 @@ import { Image } from "astro:assets";
     </template>
   </ul>
 </section>
-<!-- {
-      stacks.map((stack) => {
-        return (
-          <li>
-            <a href={`/stack/${stack.slug}`}>
-              <div class="card bg-base-100 w-96 shadow-xl">
-                <figure>
-                  <Image
-                    src={stack.data.heroImage}
-                    alt=""
-                    height="400"
-                    width="400"
-                    loading="eager"
-                  />
-                </figure>
-                <div class="card-body">
-                  <h2 class="card-title">{stack.data.title}</h2>
-                  <p class="text-sm">{stack.data.description}</p>
-                  <ul class="list-none flex flex-wrap gap-2">
-                    {stack.data.tags.map((tag) => (
-                      <li class="badge badge-primary">{tag}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </a>
-          </li>
-        );
-      })
-    } -->

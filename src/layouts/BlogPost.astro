@@ -13,39 +13,44 @@ const { title, description, pubDate, heroImage, headings } = Astro.props;
 const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
 ---
 
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <BaseHead title={title} description={description} />
 
     <ViewTransitions transition:animate={"fade"} />
   </head>
 
-  <body>
+  <body class="bg-dark-900 text-dark-100 min-h-screen">
     <main class="max-w-[90%] md:max-w-[70%] mx-auto mt-10">
       <div x-data>
-        <a class="btn btn-outline brightness-150 border-secondary" href="/"
-          >Back</a
+        <a
+          class="btn btn-outline border-accent-400 text-accent-400 hover:bg-accent-400 hover:text-dark-900"
+          href="/">Back</a
         >
       </div>
       <article>
         <div class="my-10">
-          <h1 class="text-5xl brightness-150 mb-4">{title}</h1>
-          <p class="text-xl">
+          <h1 class="text-5xl text-dark-50 mb-4">{title}</h1>
+          <p class="text-xl text-dark-200">
             {description}
           </p>
         </div>
         <div class="mb-10">
-          {heroImage && <img class="w-full" src={heroImage} alt="" />}
+          {
+            heroImage && (
+              <img class="w-full rounded-lg" src={heroImage} alt="" />
+            )
+          }
         </div>
         <div class="grid md:grid-cols-[4fr,8fr] gap-4">
           <div>
-            <h2 class="text-2xl mb-6 brightness-150">Table of Contents</h2>
+            <h2 class="text-2xl mb-6 text-dark-50">Table of Contents</h2>
             <ul class="flex flex-col gap-4">
               {
                 filteredHeadings.map((heading) => (
                   <li>
                     <a
-                      class="link link-accent text-md"
+                      class="link link-accent text-md text-accent-400 hover:text-accent-300"
                       href={`#${heading.slug}`}
                     >
                       {heading.text}
@@ -56,9 +61,9 @@ const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
             </ul>
           </div>
           <div
-            class="prose
+            class="prose prose-invert
   prose-h2:text-3xl
-  prose-a:link prose-a:link-accent prose-img:rounded-xl prose-p:font-normal"
+  prose-a:link prose-a:link-accent prose-img:rounded-xl prose-p:font-normal max-w-none"
           >
             <slot />
           </div>

@@ -1,0 +1,292 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import { ViewTransitions } from "astro:transitions";
+
+type Props = CollectionEntry<"stacks">["data"] & {
+  headings: { depth: number; text: string; slug: string }[];
+};
+
+const {
+  title,
+  description,
+  pubDate,
+  heroImage,
+  headings,
+  status,
+  githubUrl,
+  liveUrl,
+  techStack,
+  readTime,
+} = Astro.props;
+
+const filteredHeadings = headings.filter((heading) => heading.depth <= 2);
+
+const getStatusColor = (status: string | undefined) => {
+  switch (status) {
+    case "planning":
+      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "in-progress":
+      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "completed":
+      return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "on-hold":
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  }
+};
+
+const getStatusText = (status: string | undefined) => {
+  switch (status) {
+    case "planning":
+      return "Planning";
+    case "in-progress":
+      return "In Progress";
+    case "completed":
+      return "Completed";
+    case "on-hold":
+      return "On Hold";
+    default:
+      return "Unknown";
+  }
+};
+---
+
+<html lang="en" class="dark">
+  <head>
+    <BaseHead title={title} description={description} />
+    <ViewTransitions transition:animate={"fade"} />
+  </head>
+
+  <body class="bg-dark-900 text-dark-100 min-h-screen">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden">
+      {
+        heroImage && (
+          <div class="absolute inset-0">
+            <img
+              src={heroImage}
+              alt=""
+              class="w-full h-full object-cover opacity-20"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-dark-900/50 to-dark-900" />
+          </div>
+        )
+      }
+
+      <div
+        class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16"
+      >
+        <div class="text-center">
+          <div class="flex justify-center mb-6">
+            {
+              status && (
+                <span
+                  class={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(status)}`}
+                >
+                  {getStatusText(status)}
+                </span>
+              )
+            }
+          </div>
+
+          <h1
+            class="text-5xl md:text-6xl font-bold text-dark-50 mb-6 leading-tight"
+          >
+            {title}
+          </h1>
+
+          <p
+            class="text-xl md:text-2xl text-dark-200 max-w-4xl mx-auto mb-8 leading-relaxed"
+          >
+            {description}
+          </p>
+
+          <div class="flex flex-wrap justify-center gap-4 mb-8">
+            {
+              techStack &&
+                techStack.map((tech) => (
+                  <span class="px-4 py-2 bg-dark-800 border border-dark-600 rounded-lg text-dark-200 text-sm font-medium">
+                    {tech}
+                  </span>
+                ))
+            }
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-4">
+            {
+              githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-6 py-3 bg-dark-800 border border-dark-600 text-dark-100 hover:bg-dark-700 hover:border-dark-500 rounded-lg transition-all duration-200 font-medium"
+                >
+                  <svg
+                    class="w-5 h-5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  View on GitHub
+                </a>
+              )
+            }
+
+            {
+              liveUrl && (
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-6 py-3 bg-accent-600 text-white hover:bg-accent-700 rounded-lg transition-all duration-200 font-medium"
+                >
+                  <svg
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                  View Live
+                </a>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <!-- Back Button -->
+      <div class="mb-12">
+        <a
+          href="/"
+          class="inline-flex items-center text-accent-400 hover:text-accent-300 transition-colors font-medium"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Projects
+        </a>
+      </div>
+
+      <!-- Project Details Grid -->
+      <div class="grid lg:grid-cols-[1fr,300px] gap-12 mb-16">
+        <!-- Main Content -->
+        <div class="prose prose-invert prose-lg max-w-none">
+          <slot />
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-8">
+          <!-- Project Info -->
+          <div class="bg-dark-800 border border-dark-600 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-dark-50 mb-4">
+              Project Details
+            </h3>
+
+            <div class="space-y-4">
+              <div>
+                <span class="text-dark-400 text-sm">Published</span>
+                <p class="text-dark-100 font-medium">
+                  {
+                    pubDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  }
+                </p>
+              </div>
+
+              {
+                readTime && (
+                  <div>
+                    <span class="text-dark-400 text-sm">Read Time</span>
+                    <p class="text-dark-100 font-medium">{readTime} min read</p>
+                  </div>
+                )
+              }
+
+              {
+                status && (
+                  <div>
+                    <span class="text-dark-400 text-sm">Status</span>
+                    <p class="text-dark-100 font-medium">
+                      {getStatusText(status)}
+                    </p>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+
+          <!-- Table of Contents -->
+          {
+            filteredHeadings.length > 0 && (
+              <div class="bg-dark-800 border border-dark-600 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-dark-50 mb-4">
+                  Table of Contents
+                </h3>
+                <nav class="space-y-2">
+                  {filteredHeadings.map((heading) => (
+                    <a
+                      href={`#${heading.slug}`}
+                      class="block text-dark-300 hover:text-accent-400 transition-colors text-sm py-1"
+                    >
+                      {heading.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            )
+          }
+
+          <!-- Tech Stack -->
+          {
+            techStack && techStack.length > 0 && (
+              <div class="bg-dark-800 border border-dark-600 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-dark-50 mb-4">
+                  Tech Stack
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  {techStack.map((tech) => (
+                    <span class="px-3 py-1 bg-dark-700 border border-dark-600 rounded-lg text-dark-200 text-sm">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

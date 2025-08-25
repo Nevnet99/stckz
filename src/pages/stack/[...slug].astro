@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import BlogPost from "../../layouts/BlogPost.astro";
+import ProjectPost from "../../layouts/ProjectPost.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("stacks");
@@ -17,6 +17,6 @@ const stack = Astro.props;
 const { Content, headings } = await stack.render();
 ---
 
-<BlogPost {...stack.data} headings={headings}>
+<ProjectPost {...stack.data} headings={headings}>
   <Content />
-</BlogPost>
+</ProjectPost>

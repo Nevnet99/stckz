@@ -16,6 +16,9 @@ const stacks = await getCollection("stacks");
     return new Date(b.data.pubDate) - new Date(a.data.pubDate);
   };
 
+  // Initialize filters immediately
+  window.initialStacks = stacks.sort(filterByPubDate);
+
   document.addEventListener("alpine:init", () => {
     Alpine.store("authors", {
       authors: AUTHORS,
@@ -28,63 +31,201 @@ const stacks = await getCollection("stacks");
       activeFilters: [],
       stacks: stacks.sort(filterByPubDate),
       filteredStacks() {
-        if (this.activeFilters.length === 0) {
+        try {
+          console.log(
+            "Filtering stacks with active filters:",
+            this.activeFilters
+          );
+          console.log("Total stacks available:", this.stacks.length);
+
+          if (this.activeFilters.length === 0) {
+            console.log("No active filters, returning all stacks");
+            return this.stacks;
+          }
+
+          const filteredStacks = this.stacks.filter((stack) => {
+            const matches = this.activeFilters.some((filter) => {
+              // Check if filter matches any of the stack properties
+              const matchesTags =
+                stack.data.tags && stack.data.tags.includes(filter);
+              const matchesCategory =
+                stack.data.category && stack.data.category.includes(filter);
+              const matchesStatus = stack.data.status === filter;
+              const matchesYear =
+                new Date(stack.data.pubDate).getFullYear().toString() ===
+                filter;
+
+              const isMatch =
+                matchesTags || matchesCategory || matchesStatus || matchesYear;
+
+              if (isMatch) {
+                console.log(
+                  `Stack "${stack.data.title}" matches filter "${filter}"`
+                );
+              }
+
+              return isMatch;
+            });
+
+            return matches;
+          });
+
+          console.log("Filtered stacks count:", filteredStacks.length);
+          const filteredStacksByDate = filteredStacks.sort(filterByPubDate);
+
+          return filteredStacksByDate;
+        } catch (error) {
+          console.error("Error in filteredStacks:", error);
           return this.stacks;
         }
-
-        const filteredStacks = this.stacks.filter((stack) => {
-          return this.activeFilters.some((filter) => {
-            return (
-              stack.data.tags.includes(filter) ||
-              stack.data.category.includes(filter)
-            );
-          });
-        });
-
-        const filteredStacksByDate = filteredStacks.sort(filterByPubDate);
-
-        return filteredStacksByDate;
       },
       addFilter(filter) {
-        if (this.activeFilters.includes(filter)) {
-          this.activeFilters = this.activeFilters.filter(
-            (activeFilter) => activeFilter !== filter
-          );
-        } else {
-          this.activeFilters.push(filter);
+        try {
+          console.log("Adding filter:", filter);
+          if (this.activeFilters.includes(filter)) {
+            this.activeFilters = this.activeFilters.filter(
+              (activeFilter) => activeFilter !== filter
+            );
+            console.log("Filter removed, active filters:", this.activeFilters);
+          } else {
+            this.activeFilters.push(filter);
+            console.log("Filter added, active filters:", this.activeFilters);
+          }
+        } catch (error) {
+          console.error("Error adding filter:", error);
+        }
+      },
+      clearAllFilters() {
+        try {
+          console.log("Clearing all filters");
+          this.activeFilters = [];
+        } catch (error) {
+          console.error("Error clearing filters:", error);
+        }
+      },
+      resetStore() {
+        try {
+          console.log("Resetting filter store");
+          this.activeFilters = [];
+          this.stacks = window.initialStacks;
+        } catch (error) {
+          console.error("Error resetting store:", error);
         }
       },
     });
 
-    document.querySelectorAll(".posts-skeleton").forEach((el) => {
-      el.style = "display: none";
-    });
-  });
-
-  document.querySelectorAll(".posts-skeleton").forEach((el) => {
-    el.style = "display: none";
+    // Alpine.js is ready
+    console.log("Alpine.js initialized successfully");
   });
 </script>
 
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
     <ViewTransitions transition:animate={"fade"} />
   </head>
-  <body>
+  <body class="bg-dark-900 text-dark-100 min-h-screen">
     <main class="flex justify-center flex-col items-center py-20 px-12">
       <section class="flex flex-col items-center">
-        <h1 class="text-9xl font-black mb-4 brightness-150">Stckz</h1>
-        <h2 class="text-4xl mb-12 text-center md:max-w-[60%] brightness-150">
-          A one stop shop for ramblings and modern web development stacks.
+        <h1
+          class="text-8xl md:text-9xl font-black mb-6 text-dark-50 tracking-tight"
+        >
+          STCKZ
+        </h1>
+        <h2
+          class="text-2xl md:text-3xl mb-6 text-center md:max-w-[80%] text-dark-200 leading-relaxed font-medium"
+        >
+          A collection of projects, experiments, and the journey of building
+          software
         </h2>
+        <p
+          class="text-lg text-dark-300 text-center md:max-w-[70%] mb-12 leading-relaxed"
+        >
+          From concept to deployment, explore the projects I'm building and the
+          technologies I'm learning along the way. Each project represents a
+          step in my development journey.
+        </p>
       </section>
 
-      <div class="grid gap-3 md:grid-cols-[12rem,1fr] w-full">
-        <Filters />
-        <Posts />
+      <div class="grid gap-6 md:grid-cols-[16rem,1fr] w-full max-w-7xl">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-dark-50">Filter Projects</h3>
+            <div class="flex gap-2">
+              <button
+                id="clear-all-btn"
+                class="text-xs text-accent-400 hover:text-accent-300 transition-colors px-2 py-1 rounded-md hover:bg-accent-600/10"
+                style="display: none;"
+              >
+                Clear all
+              </button>
+              <button
+                id="reset-store-btn"
+                class="text-xs text-yellow-400 hover:text-yellow-300 transition-colors px-2 py-1 rounded-md hover:bg-yellow-600/10"
+                title="Reset filter store if projects aren't showing"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+          <Filters />
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-2xl font-semibold text-dark-50">
+              Featured Projects
+            </h3>
+            <span
+              class="text-dark-400 text-sm"
+              x-text="`${$store.filters.filteredStacks().length} projects`"
+            ></span>
+          </div>
+          <Posts />
+        </div>
       </div>
     </main>
     <Footer />
+
+    <script>
+      // Button functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const clearAllBtn = document.getElementById("clear-all-btn");
+        const resetStoreBtn = document.getElementById("reset-store-btn");
+
+        if (!clearAllBtn || !resetStoreBtn) return;
+
+        clearAllBtn.addEventListener("click", function () {
+          if (window.Alpine && (window.Alpine as any).store("filters")) {
+            (window.Alpine as any).store("filters").clearAllFilters();
+          }
+        });
+
+        resetStoreBtn.addEventListener("click", function () {
+          if (window.Alpine && (window.Alpine as any).store("filters")) {
+            (window.Alpine as any).store("filters").resetStore();
+          }
+        });
+
+        // Show/hide clear all button based on active filters
+        function updateClearButton() {
+          if (window.Alpine && (window.Alpine as any).store("filters")) {
+            const activeFilters = (window.Alpine as any).store(
+              "filters"
+            ).activeFilters;
+            if (clearAllBtn) {
+              clearAllBtn.style.display =
+                activeFilters.length > 0 ? "block" : "none";
+            }
+          }
+        }
+
+        // Update button visibility when filters change
+        if (window.Alpine) {
+          (window.Alpine as any).effect(() => {
+            updateClearButton();
+          });
+        }
+      });
+    </script>
   </body>
 </html>
